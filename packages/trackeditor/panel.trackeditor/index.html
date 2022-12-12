@@ -1,0 +1,28 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="index.css">
+    <script type="text/javascript" src="index.js" defer></script>
+</head>
+<!-- 魚線Json物件 -->
+<div class="fishline setup">
+    Track <ui-asset v-el:json_fishline @confirm="onChange_JsonObject" @Cancel="onCancel_JsonObject" type="cc.JsonAsset" droppable="asset" style="width:150px" class="self-end"></ui-asset>
+    <ui-button @confirm="onFishLineSetup" class="self-end">Confirm</ui-button>
+</div>>
+<!-- 多線編輯 -->
+<div class="multiple-track-editor">
+    <template v-if="isJsonSetuped === true">
+        <ui-button @confirm="onFishLineSave" class="self-end">Save</ui-button>
+        <div v-for="indexJson in getJsonLangth" :key="indexJson">
+            <div class="header">Line {{indexJson}}</div>
+            <ui-checkbox @confirm="onChange_TrackActived(indexJson)" v-value="activedTracks[indexJson]">Display</ui-checkbox>
+        </div>>
+    </template>
+</div>>
+<!-- 新增Json文件
+<div class="create json file">
+    <ui-input v-value="newJsonName.value" placeholder="New Json File Name" class="self-center"></ui-input>&nbsp;<ui-button @confirm="onCreateJson" class="self-end">Create New Json File</ui-button>
+</div>>-->
+</html>

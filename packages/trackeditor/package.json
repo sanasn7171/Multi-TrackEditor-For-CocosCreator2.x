@@ -1,0 +1,28 @@
+{
+    "name": "trackeditor",
+    "version": "0.0.1",
+    "description": "",
+    "author": "sanasn7171",
+    "main": "main.js",
+    "scene-script": "TrackEditorWindow.js",
+    "main-menu": 
+    {
+      "Window/TrackEditor":
+      {
+        "message": "trackeditor:open-trackeditor"
+      }
+    },
+    "panel.trackeditor": 
+    {
+        "main": "panel.trackeditor/index.js",
+        "type": "dockable",
+        "title": "Multi-Track Editor",
+        "engineSupport": true,
+        "min-width": 380,
+        "min-height": 500
+    },
+    "gizmos": 
+    {
+      "TrackComponent": "packages://trackeditor/TrackGizmo.js"
+    }
+  }
