@@ -11,18 +11,22 @@
     Track <ui-asset v-el:json_fishline @confirm="onChange_JsonObject" @Cancel="onCancel_JsonObject" type="cc.JsonAsset" droppable="asset" style="width:150px" class="self-end"></ui-asset>
     <ui-button @confirm="onFishLineSetup" class="self-end">Confirm</ui-button>
 </div>>
+<!-- 新增Json文件 -->
+<div class="create json file">
+    Create New Json File  <br>
+    File Path<ui-input v-value="newJsonPath" placeholder="D:/ProjectName/assets/Tracks/new.json" class="self-center"></ui-input>  <br>
+    <ui-button @confirm="onCreateJson" class="self-end">Create</ui-button>
+</div>>
 <!-- 多線編輯 -->
 <div class="multiple-track-editor">
     <template v-if="isJsonSetuped === true">
-        <ui-button @confirm="onFishLineSave" class="self-end">Save</ui-button>
         <div v-for="indexJson in getJsonLangth" :key="indexJson">
-            <div class="header">Line {{indexJson}}</div>
+            <div class="header">{{jsonKeys[indexJson]}}</div>
             <ui-checkbox @confirm="onChange_TrackActived(indexJson)" v-value="activedTracks[indexJson]">Display</ui-checkbox>
+            <ui-button @confirm="onRemoveTrack(indexJson)" class="self-end">Remove Track</ui-button>
         </div>>
+        <ui-button @confirm="onAddTrack" class="self-end">Add Track</ui-button>
+        <ui-button @confirm="onFishLineSave" class="self-end">Save</ui-button>
     </template>
 </div>>
-<!-- 新增Json文件
-<div class="create json file">
-    <ui-input v-value="newJsonName.value" placeholder="New Json File Name" class="self-center"></ui-input>&nbsp;<ui-button @confirm="onCreateJson" class="self-end">Create New Json File</ui-button>
-</div>>-->
 </html>

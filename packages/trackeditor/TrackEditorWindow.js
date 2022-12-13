@@ -41,8 +41,8 @@ module.exports =
   },
   'DrawAllhPath' : function(e,jsonObjUUID)
   {
-    let jsonPath = Editor.assetdb.remote.uuidToFspath(jsonObjUUID); // 將物件UUID轉換為路徑
-
+      let jsonPath = Editor.assetdb.remote.uuidToFspath(jsonObjUUID); // 將物件UUID轉換為路徑
+      
     // 透過UUID讀取對象Json檔案
     cc.assetManager.loadAny({'uuid': jsonObjUUID,type: cc.JsonAsset, bundle: 'resources'},function(err,jsonAsset)
       {
@@ -96,6 +96,18 @@ module.exports =
       }
     );
   },
+  // 追加路線
+  'AddTrack' : function(e)
+  {
+    let trackLine =cc.find("Tracks").addComponent("TrackComponent");
+    trackLine.lineKey = 'newTrack'
+    trackLine.wayPoints.push(cc.v2(0, 0))
+  },
+  // 刪除路線
+  'RemoveTrack' : function(e,index)
+  {
+    tracks = cc.find("Tracks").getComponents("TrackComponent")[index].destroy();
+  },
   // 啟用魚線元件的可視性
   'ActiveTrack' : function(e,indexJson,isActived)
   {
@@ -118,12 +130,13 @@ module.exports =
 
       // 獲取Json的Keys
       let jsonKeys = [];
-      for(let key in jsonAsset.json)
+      for(let i =0;i<tracks.length;i++)
       {
-        jsonKeys.push(key);
+        jsonKeys.push(tracks[i].lineKey);
       }
 
       // 將變更後的結果存為新的陣列
+      jsonAsset.json = [];
       for(let i =0;i<tracks.length;i++)
       {
         jsonAsset.json[jsonKeys[i]] = [];
@@ -156,14 +169,18 @@ module.exports =
       {
         e.reply(null);
         return;
-      } 
+        } 
+
+      // 刷新資源
+      Editor.assetdb.refresh('db://assets/', function (err, results) { });
     } // cc.assetManager.loadAny function
     );// cc.assetManager.loadAny
   },
   'SetJsonInfo' : function(e,jsonObjUUID, indexJson, indexLine, changedLine)
   {
     //var jsonUrl = Editor.assetdb.remote.uuidToUrl(jsonObjUUID); // 將物件UUID轉換為URL
-    var jsonPath = Editor.assetdb.remote.uuidToFspath(jsonObjUUID); // 將物件UUID轉換為路徑
+      var jsonPath = Editor.assetdb.remote.uuidToFspath(jsonObjUUID); // 將物件UUID轉換為路徑
+
 
     // 透過UUID讀取對象Json檔案
     cc.assetManager.loadAny({'uuid': jsonObjUUID,type: cc.JsonAsset, bundle: 'resources'},function(err,jsonAsset)
@@ -205,7 +222,23 @@ module.exports =
     ); // cc.assetManager.loadAny
   },
   // 新建Json檔案
-  'CreateJson' : function(e,jsonName)
+  'CreateJson' : function(e,jsonPath)
   {
+      let newJsonArray = {};
+      newJsonArray["line0"] = [];
+      newJsonArray["line0"][0] = [0,0];
+      // 轉換為JSON字串
+      let newJson = JSON.stringify(newJsonArray, null, 0);
+
+      // 寫入JSON檔案
+      fs.writeFile(jsonPath, newJson, (err) => {
+          if (err) {
+              Editor.log('error : ' + err);
+          }
+      }
+      );
+
+      // 刷新資源
+      Editor.assetdb.refresh('db://assets/', function (err, results) { });
   },
 };

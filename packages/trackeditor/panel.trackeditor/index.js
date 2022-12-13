@@ -24,6 +24,7 @@ Editor.Panel.extend
             this.lineList= []; // [line0:[[xxx,xxx],[yyy,yyy],[zzz,zzz]],line1:[xxx,xxx],...]
             this.lineAmount = 0;
             this.jsonKeys = [];
+            this.newJsonPath = '';
           },
           data:
           {
@@ -33,6 +34,7 @@ Editor.Panel.extend
             lineList: [],
             lineAmount: 0,
             jsonKeys: [],
+            newJsonPath: '',
           },
           computed:
           {
@@ -68,6 +70,30 @@ Editor.Panel.extend
                 { 
                 }
               );
+            },
+            // 追加路線按鈕點擊事件
+            onAddTrack()
+            {
+              Editor.Scene.callSceneScript
+              ('trackeditor', 'AddTrack',(err)=>
+                { 
+                }
+              );
+              this.activedTracks.push(false);
+              this.jsonKeys.push('newTrack');
+              this.lineAmount += 1;
+            },
+            // 刪除路線按鈕點擊事件
+            onRemoveTrack(i)
+            {
+              Editor.Scene.callSceneScript
+              ('trackeditor', 'RemoveTrack', i,(err)=>
+                { 
+                }
+              );
+              this.activedTracks.splice(i,1);
+              this.jsonKeys.splice(i,1);
+              this.lineAmount -= 1;
             },
             // Json物件修改事件
             onChange_JsonObject()
@@ -122,6 +148,16 @@ Editor.Panel.extend
               // 呼叫場景Script修改Json內容
               Editor.Scene.callSceneScript
               ('trackeditor', 'SaveValue', this.jsonObject,(err)=>
+                { 
+                }
+              );
+            },
+            // 新建Json事件
+            onCreateJson()
+            {
+              // 呼叫場景Script修改Json內容
+              Editor.Scene.callSceneScript
+              ('trackeditor', 'CreateJson',this.newJsonPath,(err)=>
                 { 
                 }
               );
